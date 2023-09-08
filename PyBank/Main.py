@@ -1,39 +1,67 @@
 import os
 import csv
-csvpath = os.path.join("..","Desktop","python-challenge","PyBank","Resources", "budget_data.csv")
+
+#Open file to read and file to output 
+csvpath = os.path.join("Resources", "budget_data1.csv")
+
+
+#set variables
 total_months=0
-with open("budget.data_csv") as csvfile:
-     
-    csv_header=next('budget_data_csv')
-    print(f"CSVHEADER:{csv_header}")
-    csv_reader = csv.reader(csvfile, delimiter=",")
+total_profit_losses=0
+prev_profit_losses=0
+changes_profit_loss=0
+changes=0
+greatest_increase=["",0]
+greatest_decrease=["",0]
+
+#Open the budget data.csv file
+with open(csvpath) as csvfile:
+    csv_reader = csv.reader(csvfile)
+    csv_header=next(csv_reader)
+
+    #calculate the totals 
+
     for row in csv_reader:
-     total_months:int
-     total_profit_losses:int
-     prev_profit_losses:int
-     total_months= "total_months"+1
-     total_profit_losses="total_profit_losses"+int(row["profit_losses"])
-     changes_profit_loss=int(row["profit_losses"])-"prev_profit_losses"
-     prev_profit_loss=int(row["profit_losses"])
-     average_change=total_profit_losses/total_months
-     greatest_increase:int
-     if changes_profit_loss>greatest_increase[1]:
-        Date:float
-        greatest_increase[0]= row[Date]
-        greatest_decrease:int
-    if changes_profit_loss<greatest_decrease[1]:
-     greatest_decrease[0]= row[Date]
-     
-
-
-
-     
-
-     print; total_months:int    
-    print (total_months)
-
+        total_months+=1
+        total_profit_losses=total_profit_losses+int(row[1])
+    #Calculate the changes in profit/losses &  greatest increase and decrease
+        if total_months!=1:
+            changes_profit_loss=int(row[1])-prev_profit_losses
+            changes+=changes_profit_loss
+            average_change=changes/(total_months-1)
+        prev_profit_losses=int(row[1])
+        if changes_profit_loss > greatest_increase[1]:
+            greatest_increase[0]= row[0]
+            greatest_increase[1]= changes_profit_loss      
+        if changes_profit_loss < greatest_decrease[1]:
+            greatest_decrease[0]= row[0]
+            greatest_decrease[1]= changes_profit_loss
+        
+   #Print to Budget analysis file
+textoutput=os.path.join("Analysis","budget_analysis.txt")
+with open(textoutput, "w") as textfile:
+   # Print Financial Analysis
+    textfile.write("Financial Analysis\n")
+    textfile.write(f"..............................\n")
+    textfile.write(f"   \n")
+    #Print total months
+    textfile.write(f"Total Months:{total_months}\n")   
+    textfile.write(f"   \n")
+    #Print Total profit/loss
+    textfile.write(f"Total:${total_profit_losses}\n")
+    textfile.write(f"   \n")
+    #Print Average change
+    textfile.write(f"Average Change:${average_change}\n")
+    textfile.write(f"   \n")
+    #Print Greatest increase
+    textfile.write(f"Greatest Increase In Profits:${greatest_increase}\n")
+    textfile.write(f"   \n")
+    #Print Greatest decrease
+    textfile.write(f"Greatest Decrease In Profits:${greatest_decrease}\n")
     
-     
+   
+
+  
 
 
 
